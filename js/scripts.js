@@ -9,8 +9,12 @@ function ToDoItem(name) {
 }
 
 
-
 // user interface logic --------------
+function resetFields() {
+  $("input#name").val("");
+  $("input.list-item").val("");
+}
+
 
 $(document).ready(function() {
 
@@ -32,7 +36,6 @@ $(document).ready(function() {
     });
 
     for (var i = newToDoItem.tasks.length; i >= 0; i -= 1) {
-      debugger;
       if (newToDoItem.tasks[i] === "") {
         newToDoItem.tasks.splice(i, 1);
       }
@@ -41,7 +44,16 @@ $(document).ready(function() {
     $("ol#tasks").append('<li id="' + newToDoItem.id + '">' + newToDoItem.name + '</li>');
 
     newToDoItem.tasks.forEach(function(element) {
-      $("li").last().append('<div class="form-group">' + '<input type="checkbox" name="todotasklist" value="">' + element + '</div>');
+      $("li").last().append('<div class="form-group">' + '<input class="toDos" type="checkbox" name="todotasklist" value="'+ element '">' + element +'</div>');
     });
+    resetFields();
   });
+
+  $("form#to-do-list").submit(function(event) {
+    event.preventDefault();
+
+    $("input:checkbox[name=todotasklist]:checked").each(function() {
+      $("#tasks li").remove();
+    })
+  })
 });
