@@ -15,9 +15,16 @@ function resetFields() {
   $("input.list-item").val("");
 }
 
+var doStuff = function(newToDoItem) {
+  $("#to-do-list").prepend('<h4 id="' + newToDoItem.id + '">' + newToDoItem.name + '</h4>')
+
+  for (var i = 0; i < newToDoItem.tasks.length; i++) {
+    $('#' + newToDoItem.id).last().append('<div class="format-group" id="' + newToDoItem.tasks[i] + '"' + '><input class="toDos" type="checkbox" name="todotasklist" value="'+ newToDoItem.tasks[i]  + '">' + newToDoItem.tasks[i]  +'</div>');
+  }
+
+};
 
 $(document).ready(function() {
-
   $("#add-list-item").click(function() {
     $("#new-items").append('<div class="new-item">' + '<div class="form-group">' +'<input type="text" class="form-control list-item"' + '</div>' + '</div>')
   });
@@ -28,6 +35,7 @@ $(document).ready(function() {
 
     var name = $("input#name").val()
     var newToDoItem = new ToDoItem(name);
+    var parentId = newToDoItem.id
 
     $(".new-item").each(function() {
       var task = $(this).find("input.list-item").val();
@@ -41,11 +49,12 @@ $(document).ready(function() {
       }
     }
 
-    $("ol#tasks").append('<li id="' + newToDoItem.id + '">' + newToDoItem.name + '</li>');
-
-    newToDoItem.tasks.forEach(function(element) {
-      $("li").last().append('<div class="form-group">' + '<input class="toDos" type="checkbox" name="todotasklist" value="'+ element '">' + element +'</div>');
+    /*newToDoItem.tasks.forEach(function(element) {
+      $("#to-do-list").last().prepend('<div class="format-group" id="' + element + '"' + '><input class="toDos" type="checkbox" name="todotasklist" value="'+ element + '">' + element +'</div>');
     });
+    $("#to-do-list").prepend('<h3>'newToDoItem.name'<h3>')
+  })*/
+    doStuff(newToDoItem);
     resetFields();
   });
 
@@ -53,7 +62,11 @@ $(document).ready(function() {
     event.preventDefault();
 
     $("input:checkbox[name=todotasklist]:checked").each(function() {
-      $("#tasks li").remove();
-    })
-  })
+      var checkedToDoList = $(this).val();
+      console.log(checkedToDoList);
+      $("#" + checkedToDoList).remove();
+
+    });
+
+  });
 });
